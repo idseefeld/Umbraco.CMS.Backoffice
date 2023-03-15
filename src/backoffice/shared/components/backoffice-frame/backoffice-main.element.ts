@@ -4,10 +4,10 @@ import { css, html } from 'lit';
 import { state } from 'lit/decorators.js';
 import { UmbSectionContext, UMB_SECTION_CONTEXT_TOKEN } from '../section/section.context';
 import { UmbBackofficeContext, UMB_BACKOFFICE_CONTEXT_TOKEN } from './backoffice.context';
+import type { UmbRouterSlotChangeEvent } from '@umbraco-cms/router';
 import type { ManifestSection } from '@umbraco-cms/models';
 import { UmbLitElement } from '@umbraco-cms/element';
 import { createExtensionElementOrFallback } from '@umbraco-cms/extensions-api';
-import { UmbRouterSlotChangeEvent } from '@umbraco-cms/router';
 
 @defineElement('umb-backoffice-main')
 export class UmbBackofficeMain extends UmbLitElement {
@@ -77,7 +77,7 @@ export class UmbBackofficeMain extends UmbLitElement {
 	}
 
 	private _onRouteChange = (event: UmbRouterSlotChangeEvent) => {
-		const currentPath = event.target.localActiveViewPath || ''
+		const currentPath = event.target.localActiveViewPath || '';
 		const section = this._sections.find((s) => this._routePrefix + s.meta.pathname === currentPath);
 		if (!section) return;
 		this._backofficeContext?.setActiveSectionAlias(section.alias);
@@ -94,11 +94,7 @@ export class UmbBackofficeMain extends UmbLitElement {
 	}
 
 	render() {
-		return html`
-			<umb-router-slot
-				.routes=${this._routes}
-				@change=${this._onRouteChange}
-			></umb-router-slot>`;
+		return html` <umb-router-slot .routes=${this._routes} @change=${this._onRouteChange}></umb-router-slot>`;
 	}
 }
 

@@ -4,7 +4,7 @@ import { customElement, state } from 'lit/decorators.js';
 import { map } from 'rxjs';
 import type { UmbWorkspaceEntityElement } from '../workspace/workspace-entity-element.interface';
 import { UmbSectionContext, UMB_SECTION_CONTEXT_TOKEN } from './section.context';
-import type { UmbRouterSlotChangeEvent, IRoutingInfo } from '@umbraco-cms/router';
+import type { UmbRouterSlotChangeEvent, IRoutingInfo, UmbRouterSlotInitEvent } from '@umbraco-cms/router';
 import type { ManifestSectionView, ManifestWorkspace, ManifestMenuSectionSidebarApp } from '@umbraco-cms/models';
 import { umbExtensionsRegistry, createExtensionElement } from '@umbraco-cms/extensions-api';
 import { UmbLitElement } from '@umbraco-cms/element';
@@ -13,6 +13,11 @@ import './section-sidebar-menu/section-sidebar-menu.element';
 import './section-views/section-views.element';
 import '../../../settings/languages/app-language-select/app-language-select.element';
 
+/**
+ * @export
+ * @class UmbSectionElement
+ * @description - Element hosting sections and section navigation.
+ */
 @customElement('umb-section')
 export class UmbSectionElement extends UmbLitElement {
 	static styles = [
@@ -37,6 +42,11 @@ export class UmbSectionElement extends UmbLitElement {
 
 	@state()
 	private _routes?: Array<any>;
+
+	@state()
+	private _routerPath?: string;
+	@state()
+	private _activePath?: string;
 
 	@state()
 	private _menus?: Array<ManifestMenuSectionSidebarApp>;
@@ -78,7 +88,9 @@ export class UmbSectionElement extends UmbLitElement {
 			this.observe(
 				umbExtensionsRegistry
 					?.extensionsOfType('menuSectionSidebarApp')
-					.pipe(map((manifests) => manifests.filter((manifest) => manifest.meta.sections.includes(sectionAlias)))),
+					.pipe(
+						map((manifests) => manifests.filter((manifest) => manifest.conditions.sections.includes(sectionAlias)))
+					),
 				(manifests) => {
 					this._menus = manifests;
 				}
@@ -152,11 +164,9 @@ export class UmbSectionElement extends UmbLitElement {
 
 	private _observeViews() {
 		this.observe(umbExtensionsRegistry?.extensionsOfType('sectionView'), (views) => {
-			const sectionViews = views
-				.filter((view) => {
-					return this._sectionAlias ? view.meta.sections.includes(this._sectionAlias) : false;
-				})
-				.sort((a, b) => b.meta.weight - a.meta.weight);
+			const sectionViews = views.filter((view) => {
+				return this._sectionAlias ? view.conditions.sections.includes(this._sectionAlias) : false;
+			});
 			if (sectionViews.length > 0) {
 				this._views = sectionViews;
 				this._createViewRoutes();
@@ -182,12 +192,14 @@ export class UmbSectionElement extends UmbLitElement {
 		}
 	}
 
+	/*
 	private _onRouteChange = (event: UmbRouterSlotChangeEvent) => {
 		const currentPath = event.target.localActiveViewPath;
 		const view = this._views?.find((view) => 'view/' + view.meta.pathname === currentPath);
 		if (!view) return;
 		this._sectionContext?.setActiveView(view);
 	};
+	*/
 
 	render() {
 		return html`
@@ -198,23 +210,32 @@ export class UmbSectionElement extends UmbLitElement {
 							<umb-extension-slot
 								type="sectionSidebarApp"
 								.filter=${(items: ManifestMenuSectionSidebarApp) =>
-									items.meta.sections.includes(this._sectionAlias || '')}></umb-extension-slot>
+									items.conditions.sections.includes(this._sectionAlias || '')}></umb-extension-slot>
 
 							<umb-extension-slot
 								type="menuSectionSidebarApp"
 								.filter=${(items: ManifestMenuSectionSidebarApp) =>
-									items.meta.sections.includes(this._sectionAlias || '')}
+									items.conditions.sections.includes(this._sectionAlias || '')}
 								default-element="umb-section-sidebar-menu"></umb-extension-slot>
 						</umb-section-sidebar>
 				  `
 				: nothing}
 			<umb-section-main>
-				${this._views && this._views.length > 0 ? html`<umb-section-views></umb-section-views>` : nothing}
+				${this._views && this._views.length > 0
+					? html`<umb-section-views
+							.routerPath=${this._routerPath}
+							.activePath=${this._activePath}></umb-section-views>`
+					: nothing}
 				${this._routes && this._routes.length > 0
 					? html`<umb-router-slot
 							id="router-slot"
 							.routes="${this._routes}"
-							@change=${this._onRouteChange}></umb-router-slot>`
+							@init=${(event: UmbRouterSlotInitEvent) => {
+								this._routerPath = event.target.absoluteRouterPath;
+							}}
+							@change=${(event: UmbRouterSlotChangeEvent) => {
+								this._activePath = event.target.localActiveViewPath || '';
+							}}></umb-router-slot>`
 					: nothing}
 				<slot></slot>
 			</umb-section-main>

@@ -5,7 +5,7 @@ import {
 	DocumentResponseModel,
 	DocumentTreeItemResponseModel,
 	PagedDocumentTreeItemResponseModel,
-} from '@umbraco-cms/backend-api';
+} from '@umbraco-cms/backoffice/backend-api';
 
 export const data: Array<DocumentResponseModel> = [
 	{
@@ -384,6 +384,26 @@ export const data: Array<DocumentResponseModel> = [
 				createDate: '2023-02-06T15:31:46.876902',
 				updateDate: '2023-02-06T15:31:51.354764',
 			},
+			{
+				$type: '',
+				state: ContentStateModel.PUBLISHED_PENDING_CHANGES,
+				publishDate: '2023-02-06T15:31:51.354764',
+				culture: 'es-es',
+				segment: null,
+				name: 'Articulo en ingles',
+				createDate: '2023-02-06T15:31:46.876902',
+				updateDate: '2023-02-06T15:31:51.354764',
+			},
+			{
+				$type: '',
+				state: ContentStateModel.NOT_CREATED,
+				publishDate: '2023-02-06T15:31:51.354764',
+				culture: 'pl-pl',
+				segment: null,
+				name: 'Artykuł w języku polskim',
+				createDate: '2023-02-06T15:31:46.876902',
+				updateDate: '2023-02-06T15:31:51.354764',
+			},
 		],
 	},
 	{
@@ -462,6 +482,24 @@ export const data: Array<DocumentResponseModel> = [
 			},
 		],
 	},
+	{
+		urls: [],
+		templateKey: null,
+		key: 'simple-document-key',
+		contentTypeKey: 'simple-document-type-key',
+		variants: [
+			{
+				$type: '',
+				state: ContentStateModel.DRAFT,
+				publishDate: '2023-02-06T15:32:24.957009',
+				culture: 'en-us',
+				segment: null,
+				name: 'Blog post B',
+				createDate: '2023-02-06T15:32:05.350038',
+				updateDate: '2023-02-06T15:32:24.957009',
+			},
+		],
+	},
 ];
 
 export const treeData: Array<DocumentTreeItemResponseModel> = [
@@ -477,7 +515,7 @@ export const treeData: Array<DocumentTreeItemResponseModel> = [
 		parentKey: null,
 		name: 'All property editors',
 		type: 'document',
-		icon: 'icon-item-arrangement',
+		icon: 'document',
 		hasChildren: true,
 	},
 	{
@@ -492,7 +530,7 @@ export const treeData: Array<DocumentTreeItemResponseModel> = [
 		parentKey: null,
 		name: 'Article in english',
 		type: 'document',
-		icon: 'icon-item-arrangement',
+		icon: 'document',
 		hasChildren: true,
 	},
 	{
@@ -507,7 +545,7 @@ export const treeData: Array<DocumentTreeItemResponseModel> = [
 		parentKey: 'c05da24d-7740-447b-9cdc-bd8ce2172e38',
 		name: 'Blog post B',
 		type: 'document',
-		icon: 'icon-item-arrangement',
+		icon: 'document',
 		hasChildren: false,
 	},
 	{
@@ -519,6 +557,21 @@ export const treeData: Array<DocumentTreeItemResponseModel> = [
 		key: 'f6n7a5b2-e7c1-463a-956bc-6ck5b9bdf447',
 		isContainer: false,
 		parentKey: 'cdd30288-2d1c-41b4-89a9-61647b4a10d5',
+		noAccess: false,
+		isProtected: false,
+		isPublished: false,
+		isEdited: false,
+		isTrashed: false,
+	},
+	{
+		$type: 'DocumentTreeItemViewModel',
+		name: 'Simple',
+		type: 'document',
+		icon: 'document',
+		hasChildren: false,
+		key: 'simple-document-key',
+		isContainer: false,
+		parentKey: null,
 		noAccess: false,
 		isProtected: false,
 		isPublished: false,

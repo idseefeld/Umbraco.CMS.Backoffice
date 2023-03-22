@@ -1,7 +1,13 @@
-import { RepositoryDetailDataSource } from '@umbraco-cms/repository';
-import { DocumentResource, ProblemDetailsModel, DocumentResponseModel } from '@umbraco-cms/backend-api';
-import { UmbControllerHostInterface } from '@umbraco-cms/controller';
-import { tryExecuteAndNotify } from '@umbraco-cms/resources';
+import { v4 as uuidv4 } from 'uuid';
+import { RepositoryDetailDataSource } from '@umbraco-cms/backoffice/repository';
+import {
+	DocumentResource,
+	ProblemDetailsModel,
+	DocumentResponseModel,
+	ContentStateModel,
+} from '@umbraco-cms/backoffice/backend-api';
+import { UmbControllerHostInterface } from '@umbraco-cms/backoffice/controller';
+import { tryExecuteAndNotify } from '@umbraco-cms/backoffice/resources';
 
 /**
  * A data source for the Document that fetches data from the server
@@ -47,10 +53,25 @@ export class UmbDocumentServerDataSource implements RepositoryDetailDataSource<D
 	 * @return {*}
 	 * @memberof UmbDocumentServerDataSource
 	 */
-	async createScaffold(parentKey: string | null) {
+	async createScaffold(documentTypeKey: string) {
 		const data: DocumentResponseModel = {
+			urls: [],
+			templateKey: null,
+			key: uuidv4(),
+			contentTypeKey: documentTypeKey,
 			values: [],
-			variants: [],
+			variants: [
+				{
+					$type: '',
+					state: ContentStateModel.DRAFT,
+					publishDate: null,
+					culture: null,
+					segment: null,
+					name: '',
+					createDate: new Date().toISOString(),
+					updateDate: undefined,
+				},
+			],
 		};
 
 		return { data };

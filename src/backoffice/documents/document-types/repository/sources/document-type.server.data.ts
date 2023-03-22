@@ -1,7 +1,7 @@
-import { RepositoryDetailDataSource } from '@umbraco-cms/repository';
-import { DocumentTypeResource, ProblemDetailsModel, DocumentTypeResponseModel } from '@umbraco-cms/backend-api';
-import { UmbControllerHostInterface } from '@umbraco-cms/controller';
-import { tryExecuteAndNotify } from '@umbraco-cms/resources';
+import { RepositoryDetailDataSource } from '@umbraco-cms/backoffice/repository';
+import { DocumentTypeResource, ProblemDetailsModel, DocumentTypeResponseModel } from '@umbraco-cms/backoffice/backend-api';
+import { UmbControllerHostInterface } from '@umbraco-cms/backoffice/controller';
+import { tryExecuteAndNotify } from '@umbraco-cms/backoffice/resources';
 
 /**
  * A data source for the Document Type that fetches data from the server
@@ -185,5 +185,32 @@ export class UmbDocumentTypeServerDataSource implements RepositoryDetailDataSour
 			this.#host,
 		);
 		*/
+	}
+
+	/**
+	 * Get the allowed document types for a given parent key
+	 * @param {string} key
+	 * @return {*}
+	 * @memberof UmbDocumentTypeServerDataSource
+	 */
+	async getAllowedChildrenOf(key: string) {
+		if (!key) throw new Error('Key is missing');
+
+		let problemDetails: ProblemDetailsModel | undefined = undefined;
+		let data = undefined;
+
+		try {
+			const res = await fetch(`/umbraco/management/api/v1/document-type/allowed-children-of/${key}`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+			data = await res.json();
+		} catch (error) {
+			problemDetails = { title: `Get allowed children of ${key} failed` };
+		}
+
+		return { data, error: problemDetails };
 	}
 }

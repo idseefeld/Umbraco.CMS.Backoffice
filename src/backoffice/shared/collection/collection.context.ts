@@ -1,25 +1,20 @@
 import { Observable } from 'rxjs';
 import type { EntityTreeItemResponseModel } from '@umbraco-cms/backoffice/backend-api';
-import type { UmbTreeStore } from '@umbraco-cms/backoffice/store';
-import type { UmbControllerHostInterface } from '@umbraco-cms/backoffice/controller';
+import type { UmbControllerHostElement } from '@umbraco-cms/backoffice/controller';
 import { UmbContextToken, UmbContextConsumerController } from '@umbraco-cms/backoffice/context-api';
 import { ArrayState, UmbObserverController } from '@umbraco-cms/backoffice/observable-api';
-import { umbExtensionsRegistry } from '@umbraco-cms/backoffice/extensions-api';
-import { createExtensionClass } from 'libs/extensions-api/create-extension-class.function';
+import { umbExtensionsRegistry, createExtensionClass } from '@umbraco-cms/backoffice/extensions-api';
 import { UmbTreeRepository } from '@umbraco-cms/backoffice/repository';
 
 // TODO: Clean up the need for store as Media has switched to use Repositories(repository).
-export class UmbCollectionContext<
-	DataType extends EntityTreeItemResponseModel = EntityTreeItemResponseModel,
-	StoreType extends UmbTreeStore<DataType> = UmbTreeStore<DataType>
-> {
-	private _host: UmbControllerHostInterface;
+export class UmbCollectionContext<DataType extends EntityTreeItemResponseModel = EntityTreeItemResponseModel> {
+	private _host: UmbControllerHostElement;
 	private _entityType: string | null;
 	private _entityKey: string | null;
 
-	#repository?: UmbTreeRepository;
+	#repository?: UmbTreeRepository<any>;
 
-	private _store?: StoreType;
+	private _store?: any;
 	protected _dataObserver?: UmbObserverController<DataType[]>;
 
 	#data = new ArrayState(<Array<DataType>>[]);
@@ -35,7 +30,7 @@ export class UmbCollectionContext<
 	*/
 
 	constructor(
-		host: UmbControllerHostInterface,
+		host: UmbControllerHostElement,
 		entityType: string | null,
 		entityKey: string | null,
 		storeAlias?: string,
@@ -46,7 +41,7 @@ export class UmbCollectionContext<
 		this._entityKey = entityKey;
 
 		if (storeAlias) {
-			new UmbContextConsumerController(this._host, storeAlias, (_instance: StoreType) => {
+			new UmbContextConsumerController(this._host, storeAlias, (_instance) => {
 				this._store = _instance;
 				if (!this._store) {
 					// TODO: if we keep the type assumption of _store existing, then we should here make sure to break the application in a good way.
@@ -175,4 +170,4 @@ export class UmbCollectionContext<
 	}
 }
 
-export const UMB_COLLECTION_CONTEXT_TOKEN = new UmbContextToken<UmbCollectionContext<any, any>>('UmbCollectionContext');
+export const UMB_COLLECTION_CONTEXT_TOKEN = new UmbContextToken<UmbCollectionContext<any>>('UmbCollectionContext');

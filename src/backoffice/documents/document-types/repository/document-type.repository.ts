@@ -1,25 +1,21 @@
-import type {
-	RepositoryTreeDataSource,
-	UmbTreeRepository,
-	UmbDetailRepository,
-} from '@umbraco-cms/backoffice/repository';
-import { UmbControllerHostInterface } from '@umbraco-cms/backoffice/controller';
-import { UmbContextConsumerController } from '@umbraco-cms/backoffice/context-api';
-import { ProblemDetailsModel, DocumentTypeResponseModel } from '@umbraco-cms/backoffice/backend-api';
-import { UmbNotificationContext, UMB_NOTIFICATION_CONTEXT_TOKEN } from '@umbraco-cms/backoffice/notification';
 import { DocumentTypeTreeServerDataSource } from './sources/document-type.tree.server.data';
 import { UmbDocumentTypeServerDataSource } from './sources/document-type.server.data';
 import { UmbDocumentTypeTreeStore, UMB_DOCUMENT_TYPE_TREE_STORE_CONTEXT_TOKEN } from './document-type.tree.store';
 import { UmbDocumentTypeStore, UMB_DOCUMENT_TYPE_STORE_CONTEXT_TOKEN } from './document-type.store';
+import type { UmbTreeDataSource, UmbTreeRepository, UmbDetailRepository } from '@umbraco-cms/backoffice/repository';
+import { UmbControllerHostElement } from '@umbraco-cms/backoffice/controller';
+import { UmbContextConsumerController } from '@umbraco-cms/backoffice/context-api';
+import { ProblemDetailsModel, DocumentTypeResponseModel } from '@umbraco-cms/backoffice/backend-api';
+import { UmbNotificationContext, UMB_NOTIFICATION_CONTEXT_TOKEN } from '@umbraco-cms/backoffice/notification';
 
 type ItemType = DocumentTypeResponseModel;
 
-export class UmbDocumentTypeRepository implements UmbTreeRepository, UmbDetailRepository<ItemType> {
+export class UmbDocumentTypeRepository implements UmbTreeRepository<ItemType>, UmbDetailRepository<ItemType> {
 	#init!: Promise<unknown>;
 
-	#host: UmbControllerHostInterface;
+	#host: UmbControllerHostElement;
 
-	#treeSource: RepositoryTreeDataSource;
+	#treeSource: UmbTreeDataSource;
 	#treeStore?: UmbDocumentTypeTreeStore;
 
 	#detailDataSource: UmbDocumentTypeServerDataSource;
@@ -27,7 +23,7 @@ export class UmbDocumentTypeRepository implements UmbTreeRepository, UmbDetailRe
 
 	#notificationContext?: UmbNotificationContext;
 
-	constructor(host: UmbControllerHostInterface) {
+	constructor(host: UmbControllerHostElement) {
 		this.#host = host;
 
 		// TODO: figure out how spin up get the correct data source

@@ -1,7 +1,7 @@
 import type { MediaDetails } from '../../';
-import { RepositoryDetailDataSource } from '@umbraco-cms/backoffice/repository';
+import { UmbDataSource } from '@umbraco-cms/backoffice/repository';
 import { ProblemDetailsModel } from '@umbraco-cms/backoffice/backend-api';
-import { UmbControllerHostInterface } from '@umbraco-cms/backoffice/controller';
+import { UmbControllerHostElement } from '@umbraco-cms/backoffice/controller';
 import { tryExecuteAndNotify } from '@umbraco-cms/backoffice/resources';
 
 /**
@@ -10,15 +10,15 @@ import { tryExecuteAndNotify } from '@umbraco-cms/backoffice/resources';
  * @class UmbTemplateDetailServerDataSource
  * @implements {TemplateDetailDataSource}
  */
-export class UmbMediaDetailServerDataSource implements RepositoryDetailDataSource<MediaDetails> {
-	#host: UmbControllerHostInterface;
+export class UmbMediaDetailServerDataSource implements UmbDataSource<MediaDetails> {
+	#host: UmbControllerHostElement;
 
 	/**
 	 * Creates an instance of UmbMediaDetailServerDataSource.
-	 * @param {UmbControllerHostInterface} host
+	 * @param {UmbControllerHostElement} host
 	 * @memberof UmbMediaDetailServerDataSource
 	 */
-	constructor(host: UmbControllerHostInterface) {
+	constructor(host: UmbControllerHostElement) {
 		this.#host = host;
 	}
 

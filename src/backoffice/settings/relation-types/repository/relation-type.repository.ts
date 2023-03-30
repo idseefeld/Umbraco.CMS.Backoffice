@@ -3,23 +3,23 @@ import { UmbRelationTypeServerDataSource } from './sources/relation-type.server.
 import { UmbRelationTypeStore, UMB_RELATION_TYPE_STORE_CONTEXT_TOKEN } from './relation-type.store';
 import { RelationTypeTreeServerDataSource } from './sources/relation-type.tree.server.data';
 import { RelationTypeTreeDataSource } from './sources';
-import { UmbControllerHostInterface } from '@umbraco-cms/backoffice/controller';
+import { UmbControllerHostElement } from '@umbraco-cms/backoffice/controller';
 import { UmbContextConsumerController } from '@umbraco-cms/backoffice/context-api';
 import { ProblemDetailsModel, RelationTypeResponseModel } from '@umbraco-cms/backoffice/backend-api';
-import type { UmbTreeRepository } from 'libs/repository/tree-repository.interface';
-import { UmbDetailRepository } from '@umbraco-cms/backoffice/repository';
+import { UmbDetailRepository, UmbTreeRepository } from '@umbraco-cms/backoffice/repository';
 import { UmbNotificationContext, UMB_NOTIFICATION_CONTEXT_TOKEN } from '@umbraco-cms/backoffice/notification';
 
 type ItemType = RelationTypeResponseModel;
+type TreeItemType = any;
 
 // Move to documentation / JSdoc
 /* We need to create a new instance of the repository from within the element context. We want the notifications to be displayed in the right context. */
 // element -> context -> repository -> (store) -> data source
 // All methods should be async and return a promise. Some methods might return an observable as part of the promise response.
-export class UmbRelationTypeRepository implements UmbTreeRepository, UmbDetailRepository<ItemType> {
+export class UmbRelationTypeRepository implements UmbTreeRepository<TreeItemType>, UmbDetailRepository<ItemType> {
 	#init!: Promise<unknown>;
 
-	#host: UmbControllerHostInterface;
+	#host: UmbControllerHostElement;
 
 	#treeSource: RelationTypeTreeDataSource;
 	#treeStore?: UmbRelationTypeTreeStore;
@@ -29,7 +29,7 @@ export class UmbRelationTypeRepository implements UmbTreeRepository, UmbDetailRe
 
 	#notificationContext?: UmbNotificationContext;
 
-	constructor(host: UmbControllerHostInterface) {
+	constructor(host: UmbControllerHostElement) {
 		this.#host = host;
 
 		// TODO: figure out how spin up get the correct data source

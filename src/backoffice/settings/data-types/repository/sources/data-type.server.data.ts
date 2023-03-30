@@ -1,12 +1,12 @@
 import { v4 as uuidv4 } from 'uuid';
-import { RepositoryDetailDataSource } from '@umbraco-cms/backoffice/repository';
+import { UmbDataSource } from '@umbraco-cms/backoffice/repository';
 import {
 	ProblemDetailsModel,
 	DataTypeResource,
 	DataTypeResponseModel,
 	DataTypeModelBaseModel,
 } from '@umbraco-cms/backoffice/backend-api';
-import { UmbControllerHostInterface } from '@umbraco-cms/backoffice/controller';
+import { UmbControllerHostElement } from '@umbraco-cms/backoffice/controller';
 import { tryExecuteAndNotify } from '@umbraco-cms/backoffice/resources';
 
 /**
@@ -15,15 +15,15 @@ import { tryExecuteAndNotify } from '@umbraco-cms/backoffice/resources';
  * @class UmbDataTypeServerDataSource
  * @implements {RepositoryDetailDataSource}
  */
-export class UmbDataTypeServerDataSource implements RepositoryDetailDataSource<DataTypeResponseModel> {
-	#host: UmbControllerHostInterface;
+export class UmbDataTypeServerDataSource implements UmbDataSource<DataTypeResponseModel> {
+	#host: UmbControllerHostElement;
 
 	/**
 	 * Creates an instance of UmbDataTypeServerDataSource.
-	 * @param {UmbControllerHostInterface} host
+	 * @param {UmbControllerHostElement} host
 	 * @memberof UmbDataTypeServerDataSource
 	 */
-	constructor(host: UmbControllerHostInterface) {
+	constructor(host: UmbControllerHostElement) {
 		this.#host = host;
 	}
 

@@ -1,6 +1,6 @@
 import { MemberTypeResource, ProblemDetailsModel } from '@umbraco-cms/backoffice/backend-api';
-import { UmbControllerHostInterface } from '@umbraco-cms/backoffice/controller';
-import { RepositoryTreeDataSource } from '@umbraco-cms/backoffice/repository';
+import { UmbControllerHostElement } from '@umbraco-cms/backoffice/controller';
+import { UmbTreeDataSource } from '@umbraco-cms/backoffice/repository';
 import { tryExecuteAndNotify } from '@umbraco-cms/backoffice/resources';
 
 /**
@@ -9,15 +9,15 @@ import { tryExecuteAndNotify } from '@umbraco-cms/backoffice/resources';
  * @class MemberTypeTreeServerDataSource
  * @implements {MemberTypeTreeDataSource}
  */
-export class MemberTypeTreeServerDataSource implements RepositoryTreeDataSource {
-	#host: UmbControllerHostInterface;
+export class MemberTypeTreeServerDataSource implements UmbTreeDataSource {
+	#host: UmbControllerHostElement;
 
 	/**
 	 * Creates an instance of MemberTypeTreeDataSource.
-	 * @param {UmbControllerHostInterface} host
+	 * @param {UmbControllerHostElement} host
 	 * @memberof MemberTypeTreeDataSource
 	 */
-	constructor(host: UmbControllerHostInterface) {
+	constructor(host: UmbControllerHostElement) {
 		this.#host = host;
 	}
 

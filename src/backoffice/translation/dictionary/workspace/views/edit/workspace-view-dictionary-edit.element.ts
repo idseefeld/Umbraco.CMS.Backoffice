@@ -2,12 +2,13 @@ import { UUITextStyles } from '@umbraco-ui/uui-css/lib';
 import { css, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
-import { ifDefined } from 'lit-html/directives/if-defined.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { UUITextareaElement, UUITextareaEvent } from '@umbraco-ui/uui';
 import { UmbDictionaryWorkspaceContext } from '../../dictionary-workspace.context';
 import { UmbDictionaryRepository } from '../../../repository/dictionary.repository';
 import { UmbLitElement } from '@umbraco-cms/internal/lit-element';
 import { DictionaryItemResponseModel, LanguageResponseModel } from '@umbraco-cms/backoffice/backend-api';
+import { UMB_ENTITY_WORKSPACE_CONTEXT } from '@umbraco-cms/backoffice/context-api';
 
 @customElement('umb-workspace-view-dictionary-edit')
 export class UmbWorkspaceViewDictionaryEditElement extends UmbLitElement {
@@ -37,8 +38,8 @@ export class UmbWorkspaceViewDictionaryEditElement extends UmbLitElement {
 		this.#repo = new UmbDictionaryRepository(this);
 		this._languages = await this.#repo.getLanguages();
 
-		this.consumeContext<UmbDictionaryWorkspaceContext>('umbWorkspaceContext', (_instance) => {
-			this.#workspaceContext = _instance;
+		this.consumeContext(UMB_ENTITY_WORKSPACE_CONTEXT, (_instance) => {
+			this.#workspaceContext = _instance as UmbDictionaryWorkspaceContext;
 			this.#observeDictionary();
 		});
 	}

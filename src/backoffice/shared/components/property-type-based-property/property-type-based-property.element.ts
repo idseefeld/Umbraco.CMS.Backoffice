@@ -1,6 +1,6 @@
 import { UUITextStyles } from '@umbraco-ui/uui-css/lib';
 import { css, html } from 'lit';
-import { ifDefined } from 'lit-html/directives/if-defined.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { customElement, property, state } from 'lit/decorators.js';
 import { UmbDataTypeRepository } from '../../../settings/data-types/repository/data-type.repository';
 import { UmbVariantId } from '../../variants/variant-id.class';
@@ -13,6 +13,7 @@ import type {
 import '../workspace-property/workspace-property.element';
 import { UmbLitElement } from '@umbraco-cms/internal/lit-element';
 import { UmbObserverController } from '@umbraco-cms/backoffice/observable-api';
+import { UMB_ENTITY_WORKSPACE_CONTEXT } from '@umbraco-cms/backoffice/context-api';
 
 @customElement('umb-property-type-based-property')
 export class UmbPropertyTypeBasedPropertyElement extends UmbLitElement {
@@ -75,8 +76,8 @@ export class UmbPropertyTypeBasedPropertyElement extends UmbLitElement {
 
 	constructor() {
 		super();
-		this.consumeContext('umbWorkspaceContext', (workspaceContext: UmbDocumentWorkspaceContext) => {
-			this._workspaceContext = workspaceContext;
+		this.consumeContext(UMB_ENTITY_WORKSPACE_CONTEXT, (workspaceContext) => {
+			this._workspaceContext = workspaceContext as UmbDocumentWorkspaceContext;
 			this._observeProperty();
 		});
 	}

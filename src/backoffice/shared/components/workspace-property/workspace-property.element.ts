@@ -1,7 +1,7 @@
 import { UUITextStyles } from '@umbraco-ui/uui-css/lib';
 import { css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { ifDefined } from 'lit-html/directives/if-defined.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { UmbVariantId } from '../../variants/variant-id.class';
 import { UmbWorkspacePropertyContext } from './workspace-property.context';
 import { UmbPropertyEditorElement } from '@umbraco-cms/backoffice/property-editor';
@@ -211,17 +211,25 @@ export class UmbWorkspacePropertyElement extends UmbLitElement {
 				if (this._element) {
 					this._element.addEventListener('property-value-change', this._onPropertyEditorChange as any as EventListener);
 
-					this._valueObserver = this.observe(this._propertyContext.value, (value) => {
-						this._value = value;
-						if (this._element) {
-							this._element.value = value;
-						}
-					});
-					this._configObserver = this.observe(this._propertyContext.config, (config) => {
-						if (this._element && config) {
-							this._element.config = config;
-						}
-					});
+					this._valueObserver = this.observe(
+						this._propertyContext.value,
+						(value) => {
+							this._value = value;
+							if (this._element) {
+								this._element.value = value;
+							}
+						},
+						'_observePropertyValue'
+					);
+					this._configObserver = this.observe(
+						this._propertyContext.config,
+						(config) => {
+							if (this._element && config) {
+								this._element.config = config;
+							}
+						},
+						'_observePropertyConfig'
+					);
 				}
 
 				this.requestUpdate('element', oldValue);

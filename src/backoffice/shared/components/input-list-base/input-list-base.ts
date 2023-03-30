@@ -1,6 +1,6 @@
 import { html } from 'lit';
 import { property } from 'lit/decorators.js';
-import { UUIModalSidebarSize } from '@umbraco-ui/uui-modal-sidebar';
+import type { UUIModalSidebarSize } from '@umbraco-ui/uui';
 import {
 	UmbModalContext,
 	UmbModalToken,
@@ -11,7 +11,7 @@ import {
 import { UmbLitElement } from '@umbraco-cms/internal/lit-element';
 
 /** TODO: Make use of UUI FORM Mixin, to make it easily take part of a form. */
-export class UmbInputListBase extends UmbLitElement {
+export class UmbInputListBaseElement extends UmbLitElement {
 	@property({ type: Array })
 	public value: Array<string> = [];
 
